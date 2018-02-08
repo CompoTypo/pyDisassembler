@@ -86,13 +86,17 @@ def findJAddr(aLine):
 
 
 # grab a machine file
-file = input("Input a machine file: ")
-mach_file = open(file, 'r')
+infile = input("Input a machine file: ")
+mach_infile = open(infile, 'r')
+
+# open output file
+outfile = open("outfile.s", "w")
+
 
 line_count = 0  # count each line
 
-for line in mach_file:  # for each line . . .
-    #print("Line #: %d" % int(line_count + 1))
+for line in mach_infile:  # for each line . . .
+    #outfile.write("Line #: %d" % int(line_count + 1))
 
     opCode = findOp(line)
 
@@ -104,63 +108,63 @@ for line in mach_file:  # for each line . . .
         sft = findShamt(line)
         fct = findFunct(line)
 
-        #print("Type R - opCode: %d, rs: %d, rt: %d, rd: %d, shift: %d, funct: %d" % (opCode, rs, rt, rd, sft, fct))
+        #outfile.write("Type R - opCode: %d, rs: %d, rt: %d, rd: %d, shift: %d, funct: %d" % (opCode, rs, rt, rd, sft, fct))
         if fct is 0:
-            print("sll $%d $%d %d" % (rs, rt, sft))
+            outfile.write("sll $%d $%d %d\n" % (rs, rt, sft))
         if fct is 2:
-            print("srl $%d $%d %d" % (rs, rt, sft))
+            outfile.write("srl $%d $%d %d\n" % (rs, rt, sft))
         if fct is 3:
-            print("sra $%d $%d %d" % (rd, rt, sft))
+            outfile.write("sra $%d $%d %d\n" % (rd, rt, sft))
         if fct is 4:
-            print("sllv $%d $%d %d" % (rd, rt, rs))
+            outfile.write("sllv $%d $%d %d\n" % (rd, rt, rs))
         if fct is 6:
-            print("srlv $%d $%d %d" % (rd, rt, rs))
+            outfile.write("srlv $%d $%d %d\n" % (rd, rt, rs))
         if fct is 7:
-            print("srav $%d $%d %d" % (rd, rt, rs))
+            outfile.write("srav $%d $%d %d\n" % (rd, rt, rs))
         if fct is 8:
-            print("jr $%d" % rs)
+            outfile.write("jr $%d\n" % rs)
         if fct is 9 and rd is not 31:
-            print("jalr $%d $%d" % (rd, rs))
+            outfile.write("jalr $%d $%d\n" % (rd, rs))
         if fct is 9 and rd is 31:
-            print("jalr $%d" % rs)
+            outfile.write("jalr $%d\n" % rs)
         if fct is 12:
-            print("syscall")
+            outfile.write("syscall\n\n")
         if fct is 16:
-            print("mfhi $%d" % rd)
+            outfile.write("mfhi $%d\n" % rd)
         if fct is 17:
-            print("mthi $%d" % rs)
+            outfile.write("mthi $%d\n" % rs)
         if fct is 18:
-            print("mflo $%d" % rd)
+            outfile.write("mflo $%d\n" % rd)
         if fct is 19:
-            print("mtlo $%d" % rs)
+            outfile.write("mtlo $%d\n" % rs)
         if fct is 24:
-            print("mult $%d $%d" % (rs, rt))
+            outfile.write("mult $%d $%d\n" % (rs, rt))
         if fct is 25:
-            print("multu $%d $%d" % (rs, rt))
+            outfile.write("multu $%d $%d\n" % (rs, rt))
         if fct is 26:
-            print("div $%d $%d" % (rs, rt))
+            outfile.write("div $%d $%d\n" % (rs, rt))
         if fct is 27:
-            print("divu $%d $%d" % (rs, rt))
+            outfile.write("divu $%d $%d\n" % (rs, rt))
         if fct is 32:
-            print("add $%d $%d $%d" % (rd, rs, rt))
+            outfile.write("add $%d $%d $%d\n" % (rd, rs, rt))
         if fct is 33:
-            print("addu $%d $%d $%d" % (rd, rs, rt))
+            outfile.write("addu $%d $%d $%d\n" % (rd, rs, rt))
         if fct is 34:
-            print("sub $%d $%d $%d" % (rd, rs, rt))
+            outfile.write("sub $%d $%d $%d\n" % (rd, rs, rt))
         if fct is 35:
-            print("subu $%d $%d $%d" % (rd, rs, rt))
+            outfile.write("subu $%d $%d $%d\n" % (rd, rs, rt))
         if fct is 36:
-            print("and $%d $%d $%d" % (rd, rs, rt))
+            outfile.write("and $%d $%d $%d\n" % (rd, rs, rt))
         if fct is 37:
-            print("or $%d $%d $%d" % (rd, rs, rt))
+            outfile.write("or $%d $%d $%d\n" % (rd, rs, rt))
         if fct is 38:
-            print("xor $%d $%d $%d" % (rd, rs, rt))
+            outfile.write("xor $%d $%d $%d\n" % (rd, rs, rt))
         if fct is 39:
-            print("nor $%d $%d $%d" % (rd, rs, rt))
+            outfile.write("nor $%d $%d $%d\n" % (rd, rs, rt))
         if fct is 42:
-            print("slt $%d $%d $%d" % (rd, rs, rt))
+            outfile.write("slt $%d $%d $%d\n" % (rd, rs, rt))
         if fct is 43:
-            print("sltu $%d $%d $%d" % (rd, rs, rt))
+            outfile.write("sltu $%d $%d $%d\n" % (rd, rs, rt))
 
 
     elif opCode is 2 or opCode is 3:
@@ -168,9 +172,9 @@ for line in mach_file:  # for each line . . .
         psuedoAddr = findJAddr(line)
 
         if opCode is 2:
-            print("j %d" % psuedoAddr)
+            outfile.write("j %d\n" % psuedoAddr)
         else:
-            print("jal %d" % psuedoAddr)
+            outfile.write("jal %d\n" % psuedoAddr)
 
     else:
 
@@ -178,47 +182,47 @@ for line in mach_file:  # for each line . . .
         rt = findRT(line)
         iMM = findImm(line)
 
-        #print("Type I - opCode: %d, rs: %d, rt: %d, imm: %d" % (opCode, rs, rt, iMM))
+        #outfile.write("Type I - opCode: %d, rs: %d, rt: %d, imm: %d" % (opCode, rs, rt, iMM))
 
         if opCode is 4:
-            print("beq $%d $%d %d" % (rs, rt, iMM))
+            outfile.write("beq $%d $%d %d\n" % (rs, rt, iMM))
         if opCode is 5:
-            print("bne $%d $%d %d" % (rs, rt, iMM))
+            outfile.write("bne $%d $%d %d\n" % (rs, rt, iMM))
         if opCode is 6:
-            print("blez $%d %d" % (rs, iMM))
+            outfile.write("blez $%d %d\n" % (rs, iMM))
         if opCode is 7:
-            print("bgtz $%d %d" % (rs, iMM))
+            outfile.write("bgtz $%d %d\n" % (rs, iMM))
         if opCode is 8:
-            print("addi $%d $%d %d" % (rs, rt, iMM))
+            outfile.write("addi $%d $%d %d\n" % (rs, rt, iMM))
         if opCode is 9:
-            print("addiu $%d $%d %d" % (rs, rt, iMM))
+            outfile.write("addiu $%d $%d %d\n" % (rs, rt, iMM))
         if opCode is 10:
-            print("stli $%d $%d %d" % (rs, rt, iMM))
+            outfile.write("stli $%d $%d %d\n" % (rs, rt, iMM))
         if opCode is 11:
-            print("stliu $%d $%d %d" % (rs, rt, iMM))
+            outfile.write("stliu $%d $%d %d\n" % (rs, rt, iMM))
         if opCode is 12:
-            print("andi $%d $%d %d" % (rs, rt, iMM))
+            outfile.write("andi $%d $%d %d\n" % (rs, rt, iMM))
         if opCode is 13:
-            print("ori $%d $%d %d" % (rs, rt, iMM))
+            outfile.write("ori $%d $%d %d\n" % (rs, rt, iMM))
         if opCode is 14:
-            print("xor $%d $%d %d" % (rt, rs, iMM))
+            outfile.write("xor $%d $%d %d\n" % (rt, rs, iMM))
         if opCode is 15:
-            print("lui $%d %d" % (rt, iMM))
+            outfile.write("lui $%d %d\n" % (rt, iMM))
         if opCode is 32:
-            print("lb $%d %d($%d)" % (rt, iMM, rs))
+            outfile.write("lb $%d %d($%d)\n" % (rt, iMM, rs))
         if opCode is 33:
-            print("lh $%d %d($%d)" % (rt, iMM, rs))
+            outfile.write("lh $%d %d($%d)\n" % (rt, iMM, rs))
         if opCode is 34:
-            print("lw $%d %d($%d)" % (rt, iMM, rs))
+            outfile.write("lw $%d %d($%d)\n" % (rt, iMM, rs))
         if opCode is 36:
-            print("lbu $%d %d($%d)" % (rt, iMM, rs))
+            outfile.write("lbu $%d %d($%d)\n" % (rt, iMM, rs))
         if opCode is 37:
-            print("lhu $%d %d($%d)" % (rt, iMM, rs))
+            outfile.write("lhu $%d %d($%d)\n" % (rt, iMM, rs))
         if opCode is 40:
-            print("sb $%d %d($%d)" % (rt, iMM, rs))
+            outfile.write("sb $%d %d($%d)\n" % (rt, iMM, rs))
         if opCode is 41:
-            print("sh $%d %d($%d)" % (rt, iMM, rs))
+            outfile.write("sh $%d %d($%d)\n" % (rt, iMM, rs))
         if opCode is 43:
-            print("sw $%d %d($%d)" % (rt, iMM, rs))
+            outfile.write("sw $%d %d($%d)\n" % (rt, iMM, rs))
 
     line_count += 1
